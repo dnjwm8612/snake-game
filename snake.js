@@ -17,7 +17,7 @@ function randomFood() {
 
 function gameLoop() {
     requestAnimationFrame(gameLoop);
-    if (++count < 6) return;
+    if (++count < 7) return; // 20% 느리게 (6 -> 7)
     count = 0;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -33,11 +33,11 @@ function gameLoop() {
         snake.pop();
     }
 
-    // Wall collision
-    if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
-        resetGame();
-        return;
-    }
+    // Wall collision (반대편으로 이동)
+    if (head.x < 0) head.x = canvas.width - grid;
+    else if (head.x >= canvas.width) head.x = 0;
+    if (head.y < 0) head.y = canvas.height - grid;
+    else if (head.y >= canvas.height) head.y = 0;
 
     // Self collision
     for (let i = 1; i < snake.length; i++) {
@@ -53,7 +53,7 @@ function gameLoop() {
 
     // Draw snake
     ctx.fillStyle = 'lime';
-snake.forEach((segment, i) => {
+    snake.forEach((segment, i) => {
         ctx.fillRect(segment.x, segment.y, grid-2, grid-2);
     });
 
