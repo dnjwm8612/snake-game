@@ -13,6 +13,7 @@ let lastScoreTime = Date.now();
 const gameOverDiv = document.getElementById('gameOver');
 const finalScoreDiv = document.getElementById('finalScore');
 const restartBtn = document.getElementById('restartBtn');
+const timerDiv = document.getElementById('timer');
 
 function randomFood() {
     return {
@@ -41,8 +42,12 @@ function gameLoop() {
         snake.pop();
     }
 
+    // 남은 시간 표시
+    const remain = Math.max(0, 3 - ((Date.now() - lastScoreTime) / 1000));
+    timerDiv.textContent = `남은 시간: ${remain.toFixed(1)}초`;
+
     // 3초 동안 점수 못 얻으면 게임 종료
-    if (Date.now() - lastScoreTime > 3000) {
+    if (remain <= 0) {
         endGame();
         return;
     }
@@ -81,6 +86,7 @@ function endGame() {
     gameOver = true;
     gameOverDiv.style.display = 'flex';
     finalScoreDiv.textContent = `게임 종료! 점수: ${score}`;
+    timerDiv.textContent = '';
 }
 
 
